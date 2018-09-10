@@ -43,10 +43,10 @@ func run(filter filters.Filter, watcher watchers.Watcher, executor executors.Exe
 		log.Print(err)
 	}
 	for file := range watcher.Changes() {
-		log.Print("Restarting")
 		if !filter.Watched(file) {
 			continue
 		}
+		log.Print("Restarting")
 		if err := executor.Restart(); err != nil {
 			log.Print("runandwatch: error executing command: ", err)
 		}
