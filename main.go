@@ -16,8 +16,12 @@ runandwatch bash -c "go run main.go && go test ./..."
 func main() {
 	var (
 		workingDir = flag.String("workingDir", ".", "file or directory to watch")
+		logPrefix  = flag.String("logPrefix", "runandwatch: ", "Prefix for runandwatch's internal log statements")
 	)
 	flag.Parse()
+
+	log.SetPrefix(*logPrefix)
+	log.SetFlags(log.Lmicroseconds)
 
 	var cmd []string
 
@@ -43,7 +47,6 @@ func run(filter filters.Filter, watcher watchers.Watcher, executor executors.Exe
 		if !filter.Watched(file) {
 			continue
 		}
-		//
 		if err := executor.Restart(); err != nil {
 			log.Print("runandwatch: error executing command: ", err)
 		}
